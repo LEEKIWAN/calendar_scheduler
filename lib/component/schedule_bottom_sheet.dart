@@ -1,12 +1,14 @@
 import 'package:calendar_scheduler/component/custom_text_field.dart';
 import 'package:calendar_scheduler/const/colors.dart';
 import 'package:calendar_scheduler/database/drift_database.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
-  const ScheduleBottomSheet({super.key});
+  final DateTime selectedDay;
+  const ScheduleBottomSheet({required this.selectedDay, super.key});
 
   @override
   State<ScheduleBottomSheet> createState() => _ScheduleBottomSheetState();
@@ -21,8 +23,11 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   int selectedColorId = -1;
 
+
+
   @override
   Widget build(BuildContext context) {
+
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     print("rebhilded");
@@ -40,7 +45,6 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
               child: Form(
                 key: formKey,
-                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -93,7 +97,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     content = val;
   }
 
-  void onSaveTapped() {
+  void onSaveTapped() async {
     if (formKey.currentState == null) {
       return;
     }
@@ -102,6 +106,14 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
       formKey.currentState!.save();
 
       print("$startTime, $endTime, $content");
+      final schedule = SchedulesCompanion(content: Value(content!), date: Value(widget.selectedDay), startTime: Value(startTime!), endTime: Value(endTime!), colorId: Value(selectedColorId));
+      final key = await GetIt.I<LocalDatabase>().createSchedule(schedule);
+      print('완료 $key');
+
+      Navigator.of(this.context).pop();
+
+      // Navigator.of(context)
+
     } else {
       print('에러가 있습니다.');
     }

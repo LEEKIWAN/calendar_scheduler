@@ -71,7 +71,7 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Text('프로그래밍 공부하기'),
+      child: Text(content),
     );
   }
 }

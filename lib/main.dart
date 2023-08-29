@@ -15,6 +15,8 @@ const DEFAULT_COLORS = [
   '9C27B0',
 ];
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,6 +36,7 @@ void main() async {
 
 
   runApp(
-    const MaterialApp(home: HomeScreen()),
+    const MaterialApp(home: HomeScreen(),
+    ),
   );
 }
